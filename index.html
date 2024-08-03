@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      :root {
+        --backgroud-color: #1e1f1e;
+        --stepper-color: #3498db;
+        --shadow-color: #393938;
+      }
+
+      body {
+        background: var(--backgroud-color);
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 50%;
+        align-items: center;
+        justify-content: center;
+        gap: 4rem;
+      }
+      .steps {
+        display: flex;
+        width: 50%;
+        gap: 4rem;
+        justify-content: center;
+      }
+      .step {
+        color: white;
+        border: 2px solid var(--shadow-color);
+        border-radius: 76%;
+        padding: 0.3rem 0.6rem;
+        position: relative;
+        transition: all 0.7s ease-out;
+      }
+      .step:not(:last-child)::before {
+        content: "";
+        position: absolute;
+        top: 40%;
+        left: 30px;
+        width: 233%;
+        height: 3px;
+        background-color: var(--shadow-color);
+        z-index: -1;
+        transition: all 0.7s ease-out;
+      }
+
+      .step.active::before {
+        transition: all 0.7s ease-out;
+        content: "";
+        position: absolute;
+        top: 40%;
+        left: 30px;
+        width: 233%;
+        height: 3px;
+        background-color: var(--stepper-color);
+        z-index: -1;
+      }
+      .step.colorful {
+        border: 2px solid var(--stepper-color);
+      }
+      .buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 1rem;
+      }
+      button {
+        border: none;
+        background-color: var(--stepper-color);
+        border-radius: 0.5rem;
+        padding: 0.9rem 2.4rem;
+        color: white;
+        cursor: pointer;
+      }
+      .shadow {
+        background-color: var(--shadow-color);
+      }
+      .cursor-disabled {
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="steps">
+        <div class="step colorful">1</div>
+        <div class="step">2</div>
+        <div class="step">3</div>
+        <div class="step">4</div>
+      </div>
+      <div class="buttons">
+        <button class="shadow cursor-disabled">Prev</button
+        ><button>Next</button>
+      </div>
+    </div>
+    <script>
+      let steps = document.querySelector(".steps").children;
+      let n = steps.length - 1;
+      let index = 0;
+      let nextBtn = document.querySelector(
+        "body > div > div.buttons > button:nth-child(2)"
+      );
+      let prevBtn = document.querySelector(
+        "body > div > div.buttons > button:nth-child(1)"
+      );
+      function advanceStep() {
+        if (index == n - 1) {
+          nextBtn.classList.add("shadow", "cursor-disabled");
+          nextBtn.setAttribute("disabled", true);
+        }
+        if (index < n) {
+          steps[index].classList.add("active");
+          index++;
+          if (index > 0) {
+            prevBtn.classList.remove("shadow", "cursor-disabled");
+            prevBtn.removeAttribute("disabled");
+          }
+          steps[index].classList.add("colorful");
+        }
+      }
+      function backStep() {
+        if (index == 1) {
+          prevBtn.classList.add("shadow", "cursor-disabled");
+          prevBtn.setAttribute("disabled", true);
+        }
+        if (index > 0) {
+          steps[index].classList.remove("active", "colorful");
+          index--;
+          if (index > 0) {
+            nextBtn.classList.remove("shadow", "cursor-disabled");
+            nextBtn.removeAttribute("disabled");
+          }
+          steps[index].classList.remove("active");
+        }
+      }
+
+      nextBtn.addEventListener("click", advanceStep);
+      prevBtn.addEventListener("click", backStep);
+    </script>
+  </body>
+</html>
